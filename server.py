@@ -197,13 +197,13 @@ async def _verify_get() -> quart.ResponseReturnValue:
     if not isinstance(decoded_access_token, dict):
         quart.abort(http.HTTPStatus.UNAUTHORIZED)
 
-    now = int(datetime.datetime.now(tz=datetime.UTC).timestamp())
+    now = datetime.datetime.now(tz=datetime.UTC).replace(microsecond=0).timestamp()
     token_iat = decoded_access_token.get('iat', 0)
-    if token_iat >= now:
+    if token_iat > now:
         quart.abort(http.HTTPStatus.UNAUTHORIZED)
 
     token_exp = decoded_access_token.get('exp', 0)
-    if token_exp < now:
+    if token_exp <= now:
         quart.abort(http.HTTPStatus.UNAUTHORIZED)
 
     try:
