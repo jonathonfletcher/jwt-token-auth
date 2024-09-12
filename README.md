@@ -30,8 +30,9 @@ Example of a candidate approach for API keys. This approach:
 ## Token Issue
 
 ```python
-c = TokenClient('SHA256:YFJs7vPDdh5ygDn6Hl2MwXpOwaYwUgLA3Ch93sjan7E')
-token = c.access_token
+tc = TokenClient(logger=logger)
+if tc.use('SHA256:<HASH>'):
+    token = tc.access_token
 ```
 
 ### Token Issue Internals
@@ -57,14 +58,14 @@ token = c.access_token
 
 ### Client:
 ```python
-if access_token.valid:
-    headers={'Authorization': f"Bearer {access_token!s}"
+if token.valid:
+    headers={'Authorization': f"Bearer {token!s}"
 ```
 
 ### Server:
 
 ```python
-if TokenVerifier.verify_token(access_token, client_ip, issuer_public_key):
+if TokenVerifier.verify_token(token, client_ip, issuer_public_key):
 ```
 
 
