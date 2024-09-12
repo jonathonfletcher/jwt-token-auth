@@ -2,6 +2,6 @@
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
     "python.formatting.provider": "autopep8",
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "off",
     "python.analysis.diagnosticMode": "workspace",
 }
