@@ -2,7 +2,7 @@ import logging
 
 import colorlog
 
-from support import TokenClient
+from tokenauth import Token, TokenClient
 
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
@@ -14,12 +14,14 @@ if __name__ == '__main__':
     handler.setFormatter(colorlog.ColoredFormatter('%(log_color)s[%(asctime)s] %(levelname)s in %(module)s: %(message)s'))
     logger.addHandler(handler)
 
-    o = TokenClient('SHA256:cQKF3Vquko1VMT8b+DHtilunzY5EW3bcUctBcSNBhw4')
-    token = o.access_token
-    logger.info(f'{token=!s}')
-    print(f'{token.iat=}')
-    print(f'{token.exp=}')
-    print(f'{token.ipn=}')
-    print(f'{token.valid=}')
-    print(f'{o.verify(token)=}')
+    tc = TokenClient(logger=logger)
+    if tc.use('SHA256:YFJs7vPDdh5ygDn6Hl2MwXpOwaYwUgLA3Ch93sjan7E'):
+        token = tc.access_token
+        logger.info(f'{token=!s}')
+        if isinstance(token, Token):
+            print(f'{token.iat=}')
+            print(f'{token.exp=}')
+            print(f'{token.ipn=}')
+            print(f'{token.valid=}')
+            print(f'{tc.verify(token)=}')
     pass
