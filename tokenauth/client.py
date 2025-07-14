@@ -84,12 +84,12 @@ class TokenHTTPHelper:
     timeout: float
     logger: logging.Logger
 
-    def __init__(self, /, timeout: float = 120, logger: typing.Optional[logging.Logger] = None) -> None:
+    def __init__(self, /, timeout: float = 120, logger: logging.Logger | None = None) -> None:
         self.logger = logger or logging.getLogger(__name__)
         self.timeout_expiry = datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(seconds=1)
         self.timeout = timeout
 
-    def _request(self, url: str | urllib.parse.ParseResult, method: str, headers: dict[str, str], data: typing.Optional[bytes | dict] = None) -> TokenHTTPResult:
+    def _request(self, url: str | urllib.parse.ParseResult, method: str, headers: dict[str, str], data: bytes | dict | None = None) -> TokenHTTPResult:
         if isinstance(url, urllib.parse.ParseResult):
             url = url.geturl()
 
@@ -124,7 +124,7 @@ class TokenHTTPHelper:
 
         return TokenHTTPResult(result_status, result_data)
 
-    def get(self, url: str | urllib.parse.ParseResult, /, headers: typing.Optional[dict[str, str]] = None) -> TokenHTTPResult:
+    def get(self, url: str | urllib.parse.ParseResult, /, headers: dict[str, str] | None = None) -> TokenHTTPResult:
         headers = headers or {}
         return self._request(url, 'GET', headers=headers)
 
@@ -143,7 +143,7 @@ class TokenClient:
 
     _access_token: Token | None
 
-    def __init__(self, /, logger: typing.Optional[logging.Logger] = None):
+    def __init__(self, /, logger: logging.Logger | None = None):
         self.logger = logger or logging.getLogger(__name__)
 
         self.transport = TokenHTTPHelper()
