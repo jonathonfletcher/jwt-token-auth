@@ -30,7 +30,7 @@ class JWTHelper:
         tkey = cryptography_ec.generate_private_key(cryptography_ec.SECP256R1())
         return jose.backends.cryptography_backend.CryptographyECKey(tkey, jose.constants.ALGORITHMS.ES256)
 
-    def __init__(self, logger: logging.Logger, /, key: typing.Optional[jose.backends.base.Key] = None) -> None:
+    def __init__(self, logger: logging.Logger, /, key: jose.backends.base.Key | None = None) -> None:
         self.logger: typing.Final = logger
         key = key or self._generate_key()
         if not key.is_public():
@@ -59,7 +59,7 @@ class AsyncJWTHelper:
 
     helper: JWTHelper
 
-    def __init__(self, logger: logging.Logger, /, key: typing.Optional[jose.backends.base.Key] = None) -> None:
+    def __init__(self, logger: logging.Logger, /, key: jose.backends.base.Key | None = None) -> None:
         self.helper = JWTHelper(logger, key=key)
 
     async def public_key(self) -> jose.backends.base.Key:
@@ -78,7 +78,7 @@ class TokenPCKE:
     verifier: str
     method: str = 'S256'
 
-    def __init__(self, challenge: typing.Optional[str] = None):
+    def __init__(self, challenge: str | None = None):
         self.challenge = challenge
         if challenge is None:
             sha256: typing.Final = hashlib.sha256()
